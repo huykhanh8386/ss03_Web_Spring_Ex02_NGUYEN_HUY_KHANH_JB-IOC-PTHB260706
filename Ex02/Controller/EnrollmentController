@@ -1,0 +1,62 @@
+package com.example.session03.Controller;
+
+import com.example.session03.Models.Entities.Enrollment;
+import com.example.session03.Models.Services.EnrollmentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v3/enrollment")
+public class EnrollmentController {
+    private final EnrollmentService enrollmentService;
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(enrollmentService.findAll());
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(
+            @PathVariable int id
+    ) {
+        Enrollment enrollment = enrollmentService.getEnrollmentById(id);
+        if (enrollment == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(enrollment);
+    }
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody Enrollment enrollment) {
+        if (enrollment.getStudentName() == null
+                || enrollment.getStudentName().isBlank()
+                || enrollment.getCourseId() <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dữ liệu không hợp lệ");
+        }
+        Enrollment result = enrollmentService.createEnrollment(enrollment);
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID đã tồn tại");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable int id, @RequestBody Enrollment enrollment) {
+        if (enrollment.getStudentName() == null
+                || enrollment.getStudentName().isBlank()
+                || enrollment.getCourseId() <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dữ liệu không hợp lệ");
+        }
+        Enrollment result = enrollmentService.updateEnrollment(id, enrollment);
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(result);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        Enrollment result = enrollmentService.deleteEnrollmentById(id);
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+}
