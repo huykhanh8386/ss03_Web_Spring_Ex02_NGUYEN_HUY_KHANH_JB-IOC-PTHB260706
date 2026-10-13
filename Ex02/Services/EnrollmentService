@@ -1,0 +1,29 @@
+package com.example.session03.Models.Services;
+
+import com.example.session03.Models.Entities.Enrollment;
+import com.example.session03.Models.Repositories.EnrollmentRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@Service
+public class EnrollmentService {
+    private final EnrollmentRepository enrollmentRepository;
+    public List<Enrollment> findAll() {
+        return enrollmentRepository.findAll();
+    }
+    public Enrollment getEnrollmentById(int id) {
+        return enrollmentRepository.findById(id);
+    }
+    public Enrollment createEnrollment(Enrollment enrollment) {
+        return enrollmentRepository.create(enrollment);
+    }
+    public Enrollment updateEnrollment(int id, Enrollment enrollment) {
+        return enrollmentRepository.update(id, enrollment);
+    }
+    public Enrollment deleteEnrollmentById(int id) {
+        return enrollmentRepository.deleteById(id);
+    }
+}
