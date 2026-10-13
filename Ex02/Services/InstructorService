@@ -1,0 +1,29 @@
+package com.example.session03.Models.Services;
+
+import com.example.session03.Models.Entities.Instructor;
+import com.example.session03.Models.Repositories.InstructorRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@Service
+public class InstructorService {
+    private final InstructorRepository instructorRepository;
+    public List<Instructor> findAll() {
+        return instructorRepository.findAll();
+    }
+    public Instructor getInstructorById(int id) {
+        return instructorRepository.findById(id);
+    }
+    public Instructor createInstructor(Instructor instructor) {
+        return instructorRepository.create(instructor);
+    }
+    public Instructor updateInstructor(int id, Instructor instructor) {
+        return instructorRepository.update(id, instructor);
+    }
+    public Instructor deleteInstructorById(int id) {
+        return instructorRepository.deleteById(id);
+    }
+}
